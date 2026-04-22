@@ -665,7 +665,7 @@ with tab1:
             mode="lines",
             line=dict(
                 color="rgba(220, 200, 170, 0.25)",  # light orange-grey shadow
-                width=8  # besar = efek shadow (≈ “size 25 feel”)
+                width=30  # besar = efek shadow (≈ “size 25 feel”)
             ),
             hoverinfo="skip",
             showlegend=False
