@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import warnings
 import os
-import pickle
+import pickleF
 import hashlib
 from datetime import datetime, timedelta
 import pytz
@@ -658,14 +658,12 @@ with tab1:
             line=dict(color=sig_color, width=1.5, dash="dot"), showlegend=False, hoverinfo="skip"), row=1, col=1)
 
         # CI Fill
-        ci_fill = "rgba(210, 200, 180, 0.35)"
-
         fig.add_trace(go.Scatter(
-            x=fc_dates.tolist() + fc_dates[::-1].tolist(),
-            y=ci_hi_arr.tolist() + ci_lo_arr[::-1].tolist(),
+            x=fc_dates + fc_dates[::-1],
+            y=ci_hi_arr.tolist() + ci_lo_arr.tolist()[::-1],
             fill="toself",
-            fillcolor=ci_fill,
-            line=dict(color="rgba(0,0,0,0)"),  # no border
+            fillcolor="rgba(210, 200, 180, 0.3)",  # warm grey with slight orange
+            line=dict(color="rgba(0,0,0,0)"),      # keep border invisible
             name="80% Confidence Interval",
             hoverinfo="skip"
         ), row=1, col=1)
