@@ -659,7 +659,7 @@ with tab1:
 
         # CI Fill
         fig.add_trace(go.Scatter(x=fc_dates + fc_dates[::-1], y=ci_hi_arr.tolist() + ci_lo_arr.tolist()[::-1],
-            fill="toself", fillcolor=ci_fill, line=dict(color="rgba(0,0,0,0)"),
+            fill="toself", fillcolor=ci_fill, line=dict(color="rgba(200, 190, 170, 0.3)"),
             name="80% Confidence Interval", hoverinfo="skip"), row=1, col=1)
 
         # CI Borders (FIXED - using hex_to_rgba)
