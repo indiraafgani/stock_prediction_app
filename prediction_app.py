@@ -659,32 +659,19 @@ with tab1:
 
         
         # Forecast line
-        # === CONE-LIKE SHADOW (narrow → wide) ===
-        n_segments = 6
-        segment_length = len(fc_arr) // n_segments
-        
-        for i in range(n_segments):
-            start = i * segment_length
-            end = (i + 1) * segment_length if i < n_segments - 1 else len(fc_arr)
-        
-            # makin ke kanan makin tebal
-            width = 4 + i * 3  
-            
-            # makin ke kanan makin soft
-            opacity = 0.25 - i * 0.03  
-        
-            fig.add_trace(go.Scatter(
-                x=fc_dates[start:end],
-                y=fc_arr[start:end],
-                mode="lines",
-                line=dict(
-                    color=f"rgba(220, 200, 170, {opacity})",
-                    width=width
-                ),
-                hoverinfo="skip",
-                showlegend=False
-            ), row=1, col=1)
-        
+        # === WIDER SHADOW ===
+        fig.add_trace(go.Scatter(
+            x=fc_dates,
+            y=fc_arr,
+            mode="lines",
+            line=dict(
+                color="rgba(220, 200, 170, 0.22)",  # soft warm grey-orange
+                width=50  # lebih lebar dari sebelumnya
+            ),
+            hoverinfo="skip",
+            showlegend=False
+        ), row=1, col=1)
+
         # === MAIN FORECAST LINE (your original, unchanged structure) ===
         fig.add_trace(go.Scatter(
             x=fc_dates,
