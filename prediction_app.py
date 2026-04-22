@@ -18,15 +18,15 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ─── CSS ─────────────────────────────────────────────────────────────────────
+# ─── CSS (LIGHT MODE) ────────────────────────────────────────────────────────
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --bg:#070a0f; --bg2:#0d1117; --bg3:#161b22; --border:#21262d;
-  --accent:#00e676; --accent2:#2979ff; --accent3:#ff1744; --warn:#ffab00;
-  --text:#f0f6fc; --muted:#8b949e; --card:#0d1117;
+  --bg:#ffffff; --bg2:#f8fafc; --bg3:#f1f5f9; --border:#e2e8f0;
+  --accent:#10b981; --accent2:#3b82f6; --accent3:#ef4444; --warn:#f59e0b;
+  --text:#111827; --muted:#64748b; --card:#ffffff;
 }
 *{box-sizing:border-box;}
 html,body,[class*="css"]{font-family:'Syne',sans-serif;background-color:var(--bg);color:var(--text);}
@@ -37,7 +37,7 @@ html,body,[class*="css"]{font-family:'Syne',sans-serif;background-color:var(--bg
 ::-webkit-scrollbar-track{background:var(--bg);}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
 
-/* ── NAV ── */
+/* NAV */
 .nav-bar{display:flex;align-items:center;justify-content:space-between;padding:0.9rem 0;margin-bottom:1.5rem;border-bottom:1px solid var(--border);}
 .nav-logo{font-family:'Space Mono',monospace;font-size:1.4rem;font-weight:700;color:var(--accent);letter-spacing:-0.03em;}
 .nav-logo span{color:var(--muted);}
@@ -46,18 +46,18 @@ html,body,[class*="css"]{font-family:'Syne',sans-serif;background-color:var(--bg
 .status-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 6px var(--accent);animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 
-/* ── TICKER HEADER ── */
+/* TICKER HEADER */
 .ticker-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:0.8rem;}
 .ticker-name{font-size:2.2rem;font-weight:800;line-height:1;color:var(--text);}
 .ticker-sub{font-size:0.8rem;color:var(--muted);font-family:'Space Mono',monospace;margin-top:0.3rem;}
 .ticker-price{text-align:right;}
 .price-big{font-size:2rem;font-weight:700;font-family:'Space Mono',monospace;color:var(--text);}
 .price-chg{font-size:0.85rem;font-family:'Space Mono',monospace;}
-.up{color:#00e676 !important;} .dn{color:#ff1744 !important;} .fl{color:#ffab00 !important;}
+.up{color:#10b981 !important;} .dn{color:#ef4444 !important;} .fl{color:#f59e0b !important;}
 
-/* ── METRIC CARDS ── */
+/* METRIC CARDS */
 .metric-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0.8rem;margin-bottom:1.2rem;}
-.metric-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:0.9rem 1rem;position:relative;overflow:hidden;}
+.metric-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:0.9rem 1rem;position:relative;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.05);}
 .metric-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
 .metric-card.green::before{background:var(--accent);}
 .metric-card.blue::before{background:var(--accent2);}
@@ -67,70 +67,69 @@ html,body,[class*="css"]{font-family:'Syne',sans-serif;background-color:var(--bg
 .metric-value{font-size:1.5rem;font-weight:700;font-family:'Space Mono',monospace;color:var(--text);}
 .metric-sub{font-size:0.7rem;color:var(--muted);margin-top:0.2rem;}
 
-/* ── SIGNAL BOX ── */
+/* SIGNAL BOX */
 .signal-box{border-radius:10px;padding:1.4rem 1.8rem;display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;border:1px solid;}
-.signal-box.buy{background:rgba(0,230,118,0.09);border-color:#00e676;}
-.signal-box.sell{background:rgba(255,23,68,0.09);border-color:#ff1744;}
-.signal-box.hold{background:rgba(255,171,0,0.09);border-color:#ffab00;}
+.signal-box.buy{background:rgba(16,185,129,0.08);border-color:#10b981;}
+.signal-box.sell{background:rgba(239,68,68,0.08);border-color:#ef4444;}
+.signal-box.hold{background:rgba(245,158,11,0.08);border-color:#f59e0b;}
 .signal-label{font-size:0.65rem;color:var(--muted);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.1em;}
 .signal-value{font-size:2.4rem;font-weight:800;letter-spacing:-0.02em;}
-.signal-box.buy .signal-value{color:#00e676;}
-.signal-box.sell .signal-value{color:#ff1744;}
-.signal-box.hold .signal-value{color:#ffab00;}
-.signal-reason{font-size:0.8rem;color:#c9d1d9;max-width:50%;}
+.signal-box.buy .signal-value{color:#10b981;}
+.signal-box.sell .signal-value{color:#ef4444;}
+.signal-box.hold .signal-value{color:#f59e0b;}
+.signal-reason{font-size:0.8rem;color:#334155;max-width:50%;}
 .signal-conf{text-align:right;font-family:'Space Mono',monospace;}
 .conf-pct{font-size:1.6rem;font-weight:700;}
 .conf-label{font-size:0.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;}
 
-/* ── INSIGHT BOX ── */
-.insight-box{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:1rem 1.2rem;margin-bottom:1.2rem;font-size:0.85rem;line-height:1.7;color:#c9d1d9;}
+/* INSIGHT BOX */
+.insight-box{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:1rem 1.2rem;margin-bottom:1.2rem;font-size:0.85rem;line-height:1.7;color:#334155;}
 .insight-title{font-size:0.65rem;color:var(--muted);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem;}
 
-/* ── MODEL GRID ── */
+/* MODEL GRID */
 .model-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0.8rem;margin-bottom:1.2rem;}
-.model-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:0.9rem 1rem;}
+.model-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:0.9rem 1rem;box-shadow:0 1px 3px rgba(0,0,0,0.05);}
 .model-card-title{font-size:0.65rem;color:var(--muted);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem;}
-.model-name{font-size:1rem;font-weight:600;color:#60a5fa;font-family:'Space Mono',monospace;}
+.model-name{font-size:1rem;font-weight:600;color:#3b82f6;font-family:'Space Mono',monospace;}
 .eval-grid{display:flex;gap:1rem;margin-top:0.4rem;flex-wrap:wrap;}
 .eval-item{font-size:0.75rem;font-family:'Space Mono',monospace;color:var(--muted);}
 .eval-item span{color:var(--text);}
 
-/* ── FORECAST TABLE ── */
+/* FORECAST TABLE */
 .forecast-table{width:100%;border-collapse:collapse;font-family:'Space Mono',monospace;font-size:0.78rem;}
 .forecast-table th{text-align:left;padding:0.5rem 0.7rem;color:var(--muted);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid var(--border);}
-.forecast-table td{padding:0.55rem 0.7rem;border-bottom:1px solid rgba(33,38,45,0.5);color:var(--text);}
+.forecast-table td{padding:0.55rem 0.7rem;border-bottom:1px solid rgba(226,232,240,0.6);color:var(--text);}
 .forecast-table tr:last-child td{border-bottom:none;}
-.forecast-table tr:hover td{background:rgba(255,255,255,0.03);}
+.forecast-table tr:hover td{background:rgba(15,23,42,0.03);}
 
-/* ── INDICATOR CARDS ── */
+/* INDICATOR CARDS */
 .ind-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0.8rem;margin-bottom:1.2rem;}
-.ind-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:0.9rem 1rem;}
+.ind-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:0.9rem 1rem;box-shadow:0 1px 3px rgba(0,0,0,0.05);}
 .ind-name{font-size:0.65rem;color:var(--muted);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:0.3rem;}
 .ind-val{font-size:1.1rem;font-weight:700;font-family:'Space Mono',monospace;color:var(--text);}
 .ind-sig{font-size:0.7rem;margin-top:0.2rem;font-family:'Space Mono',monospace;font-weight:600;}
 
-/* ── WARN BOX ── */
-.warn-box{background:rgba(255,171,0,0.08);border:1px solid rgba(255,171,0,0.4);border-radius:8px;padding:0.8rem 1rem;font-size:0.78rem;color:#ffcc02;margin-bottom:1rem;font-family:'Space Mono',monospace;}
+/* WARN BOX */
+.warn-box{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.4);border-radius:8px;padding:0.8rem 1rem;font-size:0.78rem;color:#b45309;margin-bottom:1rem;font-family:'Space Mono',monospace;}
 .sec-hdr{font-size:0.65rem;color:var(--muted);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.1em;padding-bottom:0.4rem;border-bottom:1px solid var(--border);margin-bottom:0.8rem;}
 
-/* ── SIDEBAR ── */
+/* SIDEBAR */
 [data-testid="stSidebar"]{background:var(--bg2) !important;border-right:1px solid var(--border) !important;}
 [data-testid="stSidebar"] .block-container{padding:1rem;}
 .sidebar-logo{font-family:'Space Mono',monospace;font-size:1.1rem;color:var(--accent);font-weight:700;margin-bottom:1.5rem;padding-bottom:0.8rem;border-bottom:1px solid var(--border);}
 
-/* ── STREAMLIT OVERRIDES ── */
-.stSelectbox>div>div{background:var(--bg3) !important;border-color:var(--border) !important;color:var(--text) !important;}
-label{color:#c9d1d9 !important;font-size:0.78rem !important;font-weight:600 !important;}
-.stButton>button{background:var(--bg3) !important;border:1px solid var(--border) !important;color:#c9d1d9 !important;font-family:'Space Mono',monospace !important;font-size:0.75rem !important;border-radius:6px !important;width:100%;margin-top:0.5rem;transition:all 0.2s;}
+/* STREAMLIT OVERRIDES */
+.stSelectbox>div>div{background:var(--card) !important;border-color:var(--border) !important;color:var(--text) !important;}
+label{color:#334155 !important;font-size:0.78rem !important;font-weight:600 !important;}
+.stButton>button{background:var(--card) !important;border:1px solid var(--border) !important;color:#334155 !important;font-family:'Space Mono',monospace !important;font-size:0.75rem !important;border-radius:6px !important;width:100%;margin-top:0.5rem;transition:all 0.2s;}
 .stButton>button:hover{border-color:var(--accent) !important;color:var(--accent) !important;}
 div[data-testid="stMetric"]{display:none;}
 .stSpinner>div{border-top-color:var(--accent) !important;}
 .stProgress>div>div>div{background:var(--accent) !important;}
 .stTabs [data-baseweb="tab-list"]{gap:0;background:var(--bg3);border-radius:6px;border:1px solid var(--border);padding:3px;}
-.stTabs [data-baseweb="tab"]{font-family:'Space Mono',monospace !important;font-size:0.72rem !important;color:#8b949e !important;background:transparent !important;border:none !important;padding:0.4rem 0.8rem !important;}
-.stTabs [aria-selected="true"]{background:var(--bg) !important;color:#f0f6fc !important;border-radius:4px !important;}
+.stTabs [data-baseweb="tab"]{font-family:'Space Mono',monospace !important;font-size:0.72rem !important;color:var(--muted) !important;background:transparent !important;border:none !important;padding:0.4rem 0.8rem !important;}
+.stTabs [aria-selected="true"]{background:var(--bg) !important;color:var(--text) !important;border-radius:4px !important;}
 .stTabs [data-baseweb="tab-panel"]{padding-top:1rem !important;}
-/* Selectbox dropdown text */
 [data-testid="stSelectbox"] div[data-baseweb="select"] span{color:var(--text) !important;}
 </style>
 """, unsafe_allow_html=True)
@@ -167,7 +166,6 @@ def now_et() -> datetime:
     return datetime.now(ET_TZ)
 
 def next_biz_days(n: int, start: datetime | None = None) -> list[datetime]:
-    """Return n future business days (Mon–Fri), skipping weekends."""
     days = []
     d = (start or now_et()).replace(tzinfo=None)
     while len(days) < n:
@@ -177,7 +175,6 @@ def next_biz_days(n: int, start: datetime | None = None) -> list[datetime]:
     return days
 
 def market_status(now: datetime) -> str:
-    """Return US market status string."""
     if now.weekday() >= 5:
         return "CLOSED · WEEKEND"
     t = now.time()
@@ -209,7 +206,6 @@ def fetch_data(ticker: str, train_months: int) -> pd.DataFrame:
         df.columns = df.columns.get_level_values(0)
     df = df[["Open","High","Low","Close","Volume"]].dropna()
     df.index = pd.to_datetime(df.index)
-    # Drop weekends just in case (some data sources leak them)
     df = df[df.index.dayofweek < 5]
     return df
 
@@ -237,19 +233,16 @@ def add_features(df: pd.DataFrame) -> pd.DataFrame:
         d[f"lag_{lag}"] = c.shift(lag)
     d["returns_1d"] = c.pct_change(1)
     d["returns_5d"] = c.pct_change(5)
-    # RSI(14)
     delta = c.diff()
     gain  = delta.clip(lower=0).rolling(14).mean()
     loss  = (-delta.clip(upper=0)).rolling(14).mean()
     rs    = gain / loss.replace(0, np.nan)
     d["RSI"] = 100 - (100/(1+rs))
-    # MACD
     ema12 = c.ewm(span=12,adjust=False).mean()
     ema26 = c.ewm(span=26,adjust=False).mean()
     d["MACD"]        = ema12 - ema26
     d["MACD_signal"] = d["MACD"].ewm(span=9,adjust=False).mean()
     d["MACD_hist"]   = d["MACD"] - d["MACD_signal"]
-    # Bollinger Bands
     sma20 = c.rolling(20).mean()
     std20 = c.rolling(20).std()
     d["BB_upper"] = sma20 + 2*std20
@@ -294,7 +287,7 @@ def passes_threshold(m):
     return m["MAE"]<THRESHOLD and m["RMSE"]<THRESHOLD and m["MAPE"]<THRESHOLD
 
 
-# ─── Model Trainers ───────────────────────────────────────────────────────────
+# ─── Model Trainers (unchanged - safe) ───────────────────────────────────────
 def train_sarimax(train_series, forecast_days):
     try:
         from statsmodels.tsa.statespace.sarimax import SARIMAX
@@ -312,9 +305,8 @@ def train_sarimax(train_series, forecast_days):
                          enforce_stationarity=False,enforce_invertibility=False
                          ).fit(disp=False,maxiter=100)
         fc  = result.forecast(steps=forecast_days)
-        # Confidence interval
         pred = result.get_forecast(steps=forecast_days)
-        ci   = pred.conf_int(alpha=0.2)  # 80% CI
+        ci   = pred.conf_int(alpha=0.2)
         ci_lower = ci.iloc[:,0].values
         ci_upper = ci.iloc[:,1].values
         n   = max(5, len(train_series)//5)
@@ -372,14 +364,12 @@ def run_models(df, cfg, method):
     if method in ["Auto (Best Model)","Hybrid SARIMAX+Prophet"]:
         fc,met,ci_lo,ci_hi = train_hybrid(df, fc_days)
         results["Hybrid"]  = {"forecast":fc,"metrics":met,"ci_lo":ci_lo,"ci_hi":ci_hi}
-    # single-method fallback
     for mkey, mfn in [("SARIMAX",lambda:train_sarimax(df["Close"],fc_days)),
                       ("Prophet",lambda:train_prophet(df,fc_days)),
                       ("Hybrid",lambda:train_hybrid(df,fc_days))]:
-        if method in [mkey, f"Hybrid SARIMAX+Prophet" if mkey=="Hybrid" else "__"] and mkey not in results:
+        if method in [mkey, "Hybrid SARIMAX+Prophet" if mkey=="Hybrid" else "__"] and mkey not in results:
             fc,met,ci_lo,ci_hi = mfn()
             results[mkey] = {"forecast":fc,"metrics":met,"ci_lo":ci_lo,"ci_hi":ci_hi}
-    # best selection
     valid = {k:v for k,v in results.items() if len(v.get("forecast",[]))>0 and passes_threshold(v["metrics"])}
     if not valid:
         valid = {k:v for k,v in results.items() if len(v.get("forecast",[]))>0}
@@ -391,7 +381,7 @@ def run_models(df, cfg, method):
     return results
 
 
-# ─── Signal & Insight ─────────────────────────────────────────────────────────
+# ─── Signal & Insight (safe) ──────────────────────────────────────────────────
 def generate_signal(forecast, current_price, df, metrics):
     if len(forecast)==0 or current_price==0:
         return {"signal":"HOLD","confidence":0,"reason":"Insufficient data",
@@ -440,6 +430,16 @@ def generate_insight(ticker, name, price_data, signal, horizon, model_name):
             f"with <strong>{signal['confidence']}%</strong> confidence.")
 
 
+# ─── Helper for Plotly colors ─────────────────────────────────────────────────
+def hex_to_rgba(hex_color: str, alpha: float = 0.35) -> str:
+    """Convert #RRGGBB or #RGB to rgba string safely."""
+    hex_color = hex_color.lstrip('#')
+    if len(hex_color) == 3:
+        hex_color = ''.join([c*2 for c in hex_color])
+    rgb = tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+    return f"rgba({rgb[0]},{rgb[1]},{rgb[2]},{alpha})"
+
+
 # ─── Pipeline ─────────────────────────────────────────────────────────────────
 def run_pipeline(ticker, horizon, method, force_retrain=False):
     cfg = HORIZONS[horizon]
@@ -472,7 +472,6 @@ def run_pipeline(ticker, horizon, method, force_retrain=False):
 # ─── Sidebar ──────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown('<div class="sidebar-logo">◈ SIGNAL</div>', unsafe_allow_html=True)
-    # FIX 5: label changed to "Choose the stock:"
     ticker  = st.selectbox("Choose the stock:",  list(TICKERS.keys()),
                             format_func=lambda x: f"{x} — {TICKERS[x][:22]}")
     horizon = st.selectbox("Time Horizon", list(HORIZONS.keys()), index=1)
@@ -480,17 +479,17 @@ with st.sidebar:
     st.markdown("---")
     retrain = st.button("⟳  Force Retrain")
     st.markdown("""
-    <div style="margin-top:2rem;font-family:'Space Mono',monospace;font-size:0.62rem;color:#6e7681;">
-    SIGNAL v1.1<br>Models: SARIMAX · Prophet · Hybrid<br>
-    Indicators: RSI · MACD · Bollinger<br>Cache: .model_chance · ET timezone
+    <div style="margin-top:2rem;font-family:'Space Mono',monospace;font-size:0.62rem;color:#64748b;">
+    SIGNAL v1.2 • Light Mode<br>Models: SARIMAX · Prophet · Hybrid<br>
+    Indicators: RSI · MACD · Bollinger<br>Cache: .model_chance • ET timezone
     </div>""", unsafe_allow_html=True)
 
 
-# ─── Nav Bar (FIX 7: US Eastern Time) ────────────────────────────────────────
+# ─── Nav Bar ──────────────────────────────────────────────────────────────────
 now_et_dt   = now_et()
 now_str     = now_et_dt.strftime("%a %b %d %Y  ·  %I:%M:%S %p ET")
 mkt_status  = market_status(now_et_dt)
-mkt_color   = "#00e676" if "OPEN" in mkt_status else ("#ffab00" if "HOURS" in mkt_status or "PRE" in mkt_status else "#6e7681")
+mkt_color   = "#10b981" if "OPEN" in mkt_status else ("#f59e0b" if "HOURS" in mkt_status or "PRE" in mkt_status else "#64748b")
 
 st.markdown(f"""
 <div class="nav-bar">
@@ -544,7 +543,7 @@ st.markdown(f"""
 
 # ─── Signal Box ───────────────────────────────────────────────────────────────
 sig     = signal_data["signal"].lower()
-sig_col = "#00e676" if sig=="buy" else ("#ff1744" if sig=="sell" else "#ffab00")
+sig_col = "#10b981" if sig=="buy" else ("#ef4444" if sig=="sell" else "#f59e0b")
 st.markdown(f"""
 <div class="signal-box {sig}">
   <div>
@@ -587,7 +586,6 @@ st.markdown(f"""
   </div>
 </div>""", unsafe_allow_html=True)
 
-# ─── Model Quality Warning ────────────────────────────────────────────────────
 if not passes_threshold(metrics):
     st.markdown(f'<div class="warn-box">⚠  MODEL QUALITY ALERT — MAE ({metrics["MAE"]:.1f}) or MAPE ({metrics["MAPE"]:.1f}%) exceeds threshold of {THRESHOLD}. Consider force-retraining or changing the horizon.</div>', unsafe_allow_html=True)
 
@@ -603,22 +601,35 @@ st.markdown(f"""
 tab1, tab2, tab3, tab4 = st.tabs(["Forecast Chart", "Forecast Table", "Model Evaluation", "Technical Indicators"])
 
 # ──────────────────────────────────────────────────────────────────────────────
-# TAB 1 — FORECAST CHART  (FIX 2, 3, 4, 8)
+# TAB 1 — FORECAST CHART (Light + Historical Filter + Fixed Plotly)
 # ──────────────────────────────────────────────────────────────────────────────
 with tab1:
     if len(forecast) > 0:
         import plotly.graph_objects as go
         from plotly.subplots import make_subplots
 
-        # ── Training history — last 90 biz days, strip weekend gaps ──────────
-        hist_df    = df.tail(90).copy()
-        hist_dates = hist_df.index.tolist()          # already business days only
+        # ── Historical period filter (NEW) ───────────────────────────────────
+        st.markdown("**Historical Data Period**")
+        hist_option = st.radio(
+            "Show history for the chart:",
+            ["1 Month", "3 Months", "6 Months", "All Available"],
+            horizontal=True,
+            index=1
+        )
+        days_map = {"1 Month": 30, "3 Months": 90, "6 Months": 180, "All Available": None}
+        max_days = days_map[hist_option]
+
+        if max_days is None:
+            hist_df = df.copy()
+        else:
+            # Safe slice using last N business days
+            hist_df = df.tail(max_days * 2).iloc[-max_days:]  # conservative
+
+        hist_dates = hist_df.index.tolist()
         hist_close = hist_df["Close"].tolist()
 
-        # ── Forecast dates — business days only (FIX 8) ──────────────────────
         fc_dates = next_biz_days(len(forecast))
 
-        # ── Confidence interval fallback (proportional if not returned) ──────
         fc_arr = np.array(forecast)
         if len(ci_lo) == len(fc_arr) and len(ci_hi) == len(fc_arr):
             ci_lo_arr = np.array(ci_lo)
@@ -628,130 +639,81 @@ with tab1:
             ci_lo_arr = fc_arr - std_fc * (1 + np.arange(len(fc_arr))*0.04)
             ci_hi_arr = fc_arr + std_fc * (1 + np.arange(len(fc_arr))*0.04)
 
-        # ── Colour by signal ─────────────────────────────────────────────────
-        sig_color = "#00e676" if signal_data["signal"]=="BUY" else \
-                    ("#ff1744" if signal_data["signal"]=="SELL" else "#ffab00")
-        ci_fill   = ("rgba(0,230,118,0.13)" if signal_data["signal"]=="BUY" else
-                     "rgba(255,23,68,0.11)"  if signal_data["signal"]=="SELL" else
-                     "rgba(255,171,0,0.11)")
+        sig_color = "#10b981" if signal_data["signal"]=="BUY" else \
+                    ("#ef4444" if signal_data["signal"]=="SELL" else "#f59e0b")
+        ci_fill   = ("rgba(16,185,129,0.12)" if signal_data["signal"]=="BUY" else
+                     "rgba(239,68,68,0.10)"  if signal_data["signal"]=="SELL" else
+                     "rgba(245,158,11,0.10)")
 
-        fig = make_subplots(
-            rows=2, cols=1, shared_xaxes=True,
-            row_heights=[0.73, 0.27], vertical_spacing=0.04,
-        )
+        fig = make_subplots(rows=2, cols=1, shared_xaxes=True, row_heights=[0.73, 0.27], vertical_spacing=0.04)
 
-        # ── 1. Training / historical line (FIX 3) ───────────────────────────
-        fig.add_trace(go.Scatter(
-            x=hist_dates, y=hist_close,
-            mode="lines", name="Training data",
-            line=dict(color="#8b949e", width=1.8),
-            hovertemplate="<b>%{x|%b %d %Y}</b><br>Close: $%{y:.2f}<extra></extra>",
-        ), row=1, col=1)
+        # Historical
+        fig.add_trace(go.Scatter(x=hist_dates, y=hist_close, mode="lines", name="Training data",
+            line=dict(color="#64748b", width=1.8),
+            hovertemplate="<b>%{x|%b %d %Y}</b><br>Close: $%{y:.2f}<extra></extra>"), row=1, col=1)
 
-        # ── 2. Shaded divider: last hist date to first fc date ───────────────
+        # Junction
         junction_x = [hist_dates[-1], fc_dates[0]]
         junction_y = [hist_close[-1], float(fc_arr[0])]
-        fig.add_trace(go.Scatter(
-            x=junction_x, y=junction_y,
-            mode="lines",
-            line=dict(color=sig_color, width=1.5, dash="dot"),
-            showlegend=False,
-            hoverinfo="skip",
-        ), row=1, col=1)
+        fig.add_trace(go.Scatter(x=junction_x, y=junction_y, mode="lines",
+            line=dict(color=sig_color, width=1.5, dash="dot"), showlegend=False, hoverinfo="skip"), row=1, col=1)
 
-        # ── 3. CI shading (FIX 4) — fill between upper & lower ───────────────
-        fig.add_trace(go.Scatter(
-            x=fc_dates + fc_dates[::-1],
-            y=ci_hi_arr.tolist() + ci_lo_arr.tolist()[::-1],
-            fill="toself",
-            fillcolor=ci_fill,
-            line=dict(color="rgba(0,0,0,0)"),
-            name="80% Confidence Interval",
-            hoverinfo="skip",
-        ), row=1, col=1)
+        # CI Fill
+        fig.add_trace(go.Scatter(x=fc_dates + fc_dates[::-1], y=ci_hi_arr.tolist() + ci_lo_arr.tolist()[::-1],
+            fill="toself", fillcolor=ci_fill, line=dict(color="rgba(0,0,0,0)"),
+            name="80% Confidence Interval", hoverinfo="skip"), row=1, col=1)
 
-        # ── 4. CI upper & lower dashed borders ───────────────────────────────
-        border_rgba = sig_color.replace("#","")
-        fig.add_trace(go.Scatter(
-            x=fc_dates, y=ci_hi_arr,
-            mode="lines", name="CI Upper",
-            line=dict(color=sig_color.replace(")",",0.35)").replace("rgb","rgba") if "rgb" in sig_color else sig_color+"59",
-                      width=0.8, dash="dot"),
-            showlegend=False, hoverinfo="skip",
-        ), row=1, col=1)
-        fig.add_trace(go.Scatter(
-            x=fc_dates, y=ci_lo_arr,
-            mode="lines", name="CI Lower",
-            line=dict(color=sig_color+"59", width=0.8, dash="dot"),
-            showlegend=False, hoverinfo="skip",
-        ), row=1, col=1)
+        # CI Borders (FIXED - using hex_to_rgba)
+        ci_border_color = hex_to_rgba(sig_color, 0.45)
+        fig.add_trace(go.Scatter(x=fc_dates, y=ci_hi_arr, mode="lines", name="CI Upper",
+            line=dict(color=ci_border_color, width=0.9, dash="dot"),
+            showlegend=False, hoverinfo="skip"), row=1, col=1)
+        fig.add_trace(go.Scatter(x=fc_dates, y=ci_lo_arr, mode="lines", name="CI Lower",
+            line=dict(color=ci_border_color, width=0.9, dash="dot"),
+            showlegend=False, hoverinfo="skip"), row=1, col=1)
 
-        # ── 5. Forecast line — visually distinct (FIX 4) ─────────────────────
-        fig.add_trace(go.Scatter(
-            x=fc_dates, y=fc_arr,
-            mode="lines+markers",
+        # Forecast line
+        fig.add_trace(go.Scatter(x=fc_dates, y=fc_arr, mode="lines+markers",
             name=f"Forecast · {best_model}",
             line=dict(color=sig_color, width=2.5),
-            marker=dict(size=5, color=sig_color,
-                        line=dict(color="#0d1117", width=1.5)),
-            hovertemplate="<b>%{x|%b %d %Y}</b><br>Forecast: $%{y:.2f}<extra></extra>",
-        ), row=1, col=1)
+            marker=dict(size=5, color=sig_color, line=dict(color="#ffffff", width=1.5)),
+            hovertemplate="<b>%{x|%b %d %Y}</b><br>Forecast: $%{y:.2f}<extra></extra>"), row=1, col=1)
 
-        # ── 6. Current price reference line ──────────────────────────────────
-        fig.add_hline(
-            y=price_info["price"], line_dash="dot",
-            line_color="rgba(240,246,252,0.25)", line_width=1,
-            row=1, col=1,
-            annotation_text=f"  Now ${price_info['price']:.2f}",
-            annotation_font=dict(size=9, color="rgba(240,246,252,0.5)"),
-            annotation_position="right",
-        )
+        # Current price line
+        fig.add_hline(y=price_info["price"], line_dash="dot",
+            line_color="rgba(15,23,42,0.25)", line_width=1,
+            row=1, col=1, annotation_text=f"  Now ${price_info['price']:.2f}",
+            annotation_font=dict(size=9, color="#64748b"), annotation_position="right")
 
-        # ── 7. Volume bars (color by up/dn) ──────────────────────────────────
+        # Volume
         if "Volume" in hist_df.columns:
-            v_colors = ["#00e676" if c>=o else "#ff1744"
-                        for c,o in zip(hist_df["Close"], hist_df["Open"])]
-            fig.add_trace(go.Bar(
-                x=hist_dates, y=hist_df["Volume"].tolist(),
+            v_colors = ["#10b981" if c>=o else "#ef4444" for c,o in zip(hist_df["Close"], hist_df["Open"])]
+            fig.add_trace(go.Bar(x=hist_dates, y=hist_df["Volume"].tolist(),
                 name="Volume", marker_color=v_colors, opacity=0.55,
-                hovertemplate="<b>%{x|%b %d}</b><br>Vol: %{y:,.0f}<extra></extra>",
-            ), row=2, col=1)
+                hovertemplate="<b>%{x|%b %d}</b><br>Vol: %{y:,.0f}<extra></extra>"), row=2, col=1)
 
-        # ── Layout ────────────────────────────────────────────────────────────
         fig.update_layout(
             height=520,
-            paper_bgcolor="rgba(0,0,0,0)",
-            plot_bgcolor="rgba(13,17,23,0.9)",
-            font=dict(family="Space Mono", color="#8b949e", size=10),
-            legend=dict(
-                bgcolor="rgba(13,17,23,0.85)", bordercolor="#21262d",
-                borderwidth=1, font=dict(size=9, color="#c9d1d9"),
-                x=0.01, y=0.99, orientation="h",
-            ),
+            paper_bgcolor="#ffffff",
+            plot_bgcolor="#f8fafc",
+            font=dict(family="Space Mono", color="#64748b", size=10),
+            legend=dict(bgcolor="#f8fafc", bordercolor="#e2e8f0", borderwidth=1,
+                        font=dict(size=9, color="#334155"), x=0.01, y=0.99, orientation="h"),
             margin=dict(l=4, r=4, t=12, b=4),
             hovermode="x unified",
-            hoverlabel=dict(bgcolor="#161b22", bordercolor="#21262d",
-                            font=dict(family="Space Mono", size=10, color="#f0f6fc")),
+            hoverlabel=dict(bgcolor="#f1f5f9", bordercolor="#e2e8f0",
+                            font=dict(family="Space Mono", size=10, color="#111827")),
         )
-        # FIX 8: rangebreaks to hide weekends & after-hours gaps
-        fig.update_xaxes(
-            gridcolor="rgba(33,38,45,0.6)", zeroline=False,
-            tickfont=dict(size=9, color="#8b949e"),
-            rangebreaks=[dict(bounds=["sat","mon"])],  # skip weekends
-            showspikes=True, spikecolor="#21262d", spikethickness=1,
-        )
-        fig.update_yaxes(
-            gridcolor="rgba(33,38,45,0.6)", zeroline=False,
-            tickfont=dict(size=9, color="#8b949e"),
-            tickprefix="$",
-        )
+        fig.update_xaxes(gridcolor="rgba(226,232,240,0.6)", zeroline=False,
+                         tickfont=dict(size=9, color="#64748b"),
+                         rangebreaks=[dict(bounds=["sat","mon"])])
+        fig.update_yaxes(gridcolor="rgba(226,232,240,0.6)", zeroline=False, tickprefix="$")
+
         st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
-        # ── Legend explainer ─────────────────────────────────────────────────
         st.markdown(f"""
-        <div style="display:flex;gap:1.5rem;font-family:'Space Mono',monospace;font-size:0.68rem;
-             color:#8b949e;margin-top:0.3rem;flex-wrap:wrap;">
-          <span>── <span style="color:#8b949e">Training data (historical)</span></span>
+        <div style="display:flex;gap:1.5rem;font-family:'Space Mono',monospace;font-size:0.68rem;color:#64748b;margin-top:0.3rem;flex-wrap:wrap;">
+          <span>── <span style="color:#64748b">Training data (historical)</span></span>
           <span>── <span style="color:{sig_color}">Forecast · {best_model}</span></span>
           <span>▒ <span style="color:{sig_color}">80% Confidence Interval</span></span>
         </div>""", unsafe_allow_html=True)
@@ -759,7 +721,7 @@ with tab1:
         st.warning("No forecast data available.")
 
 # ──────────────────────────────────────────────────────────────────────────────
-# TAB 2 — FORECAST TABLE  (FIX 8: business days only)
+# TAB 2 — FORECAST TABLE
 # ──────────────────────────────────────────────────────────────────────────────
 with tab2:
     st.markdown('<div class="sec-hdr">Forecast Output Table</div>', unsafe_allow_html=True)
@@ -776,10 +738,10 @@ with tab2:
             sign = "+" if chg>=0 else ""
             ci_str = f"${lo_v:.2f} – ${hi_v:.2f}" if lo_v is not None else "—"
             rows_html += f"""<tr>
-              <td style="color:#8b949e">{dt.strftime("%a, %b %d %Y")}</td>
-              <td style="color:#f0f6fc;font-weight:600">${fc_v:.2f}</td>
+              <td style="color:#64748b">{dt.strftime("%a, %b %d %Y")}</td>
+              <td style="color:#111827;font-weight:600">${fc_v:.2f}</td>
               <td class="{cc}">{sign}{chg:.2f}%</td>
-              <td style="color:#8b949e;font-size:0.72rem">{ci_str}</td>
+              <td style="color:#64748b;font-size:0.72rem">{ci_str}</td>
             </tr>"""
         st.markdown(f"""<table class="forecast-table">
         <thead><tr>
@@ -793,7 +755,7 @@ with tab2:
 with tab3:
     st.markdown('<div class="sec-hdr">Model Performance Comparison</div>', unsafe_allow_html=True)
     best_met = all_results.get(best_model,{}).get("metrics",metrics)
-    ok_col   = "#00e676" if passes_threshold(best_met) else "#ff1744"
+    ok_col   = "#10b981" if passes_threshold(best_met) else "#ef4444"
     st.markdown(f"""
     <div class="model-grid">
       <div class="model-card">
@@ -808,10 +770,10 @@ with tab3:
       </div>
       <div class="model-card">
         <div class="model-card-title">Threshold Check</div>
-        <div class="model-name" style="color:{'#00e676' if passes_threshold(best_met) else '#ff1744'}">
+        <div class="model-name" style="color:{'#10b981' if passes_threshold(best_met) else '#ef4444'}">
           {'✓ PASS' if passes_threshold(best_met) else '✗ FAIL'}
         </div>
-        <div style="font-size:0.72rem;color:#8b949e;margin-top:0.4rem;font-family:'Space Mono',monospace;">
+        <div style="font-size:0.72rem;color:#64748b;margin-top:0.4rem;font-family:'Space Mono',monospace;">
           Limit: MAE / RMSE / MAPE &lt; {THRESHOLD}
         </div>
       </div>
@@ -824,13 +786,13 @@ with tab3:
         m  = res.get("metrics",{})
         ok = passes_threshold(m)
         ib = mname==best_model
-        rows_h += f"""<tr style="{'background:rgba(0,230,118,0.05);' if ib else ''}">
-          <td style="color:{'#00e676'if ib else '#f0f6fc'}">{'★ ' if ib else ''}{mname}</td>
-          <td style="color:#c9d1d9">{m.get('MAE',999):.3f}</td>
-          <td style="color:#c9d1d9">{m.get('RMSE',999):.3f}</td>
-          <td style="color:#c9d1d9">{m.get('MAPE',999):.2f}%</td>
-          <td style="color:{'#00e676'if m.get('DIR',0)>55 else '#ff1744'}">{m.get('DIR',0):.1f}%</td>
-          <td style="color:{'#00e676'if ok else '#ff1744'}">{'✓'if ok else '✗'}</td>
+        rows_h += f"""<tr style="{'background:rgba(16,185,129,0.05);' if ib else ''}">
+          <td style="color:{'#10b981'if ib else '#111827'}">{'★ ' if ib else ''}{mname}</td>
+          <td style="color:#334155">{m.get('MAE',999):.3f}</td>
+          <td style="color:#334155">{m.get('RMSE',999):.3f}</td>
+          <td style="color:#334155">{m.get('MAPE',999):.2f}%</td>
+          <td style="color:{'#10b981'if m.get('DIR',0)>55 else '#ef4444'}">{m.get('DIR',0):.1f}%</td>
+          <td style="color:{'#10b981'if ok else '#ef4444'}">{'✓'if ok else '✗'}</td>
         </tr>"""
     st.markdown(f"""<table class="forecast-table">
     <thead><tr>
@@ -840,16 +802,14 @@ with tab3:
     st.markdown("""
     <div class="insight-box" style="margin-top:1rem;">
       <div class="insight-title">Evaluation Methodology</div>
-      <b style="color:#f0f6fc">MAE</b> (Mean Absolute Error) — average price prediction error in dollars.
-      <b style="color:#f0f6fc">RMSE</b> penalises large errors more heavily.
-      <b style="color:#f0f6fc">MAPE</b> expresses error as a percentage of price.
-      <b style="color:#f0f6fc">DIR</b> (Directional Accuracy) measures how often the model correctly
-      predicts price direction — this is the primary model selection criterion.
-      Models with any metric &gt; 20 are automatically filtered.
+      <b style="color:#111827">MAE</b> (Mean Absolute Error) — average price prediction error in dollars.<br>
+      <b style="color:#111827">RMSE</b> penalises large errors more heavily.<br>
+      <b style="color:#111827">MAPE</b> expresses error as a percentage of price.<br>
+      <b style="color:#111827">DIR</b> (Directional Accuracy) measures how often the model correctly predicts price direction — primary selection criterion.
     </div>""", unsafe_allow_html=True)
 
 # ──────────────────────────────────────────────────────────────────────────────
-# TAB 4 — TECHNICAL INDICATORS
+# TAB 4 — TECHNICAL INDICATORS (Light mode)
 # ──────────────────────────────────────────────────────────────────────────────
 with tab4:
     st.markdown('<div class="sec-hdr">Technical Indicators</div>', unsafe_allow_html=True)
@@ -858,11 +818,11 @@ with tab4:
     bb_v   = signal_data.get("bb_pct",  0.5)
 
     rsi_sig = "OVERSOLD ▲"   if rsi_v<30  else ("OVERBOUGHT ▼" if rsi_v>70  else "NEUTRAL")
-    rsi_c   = "#00e676"       if rsi_v<30  else ("#ff1744"      if rsi_v>70  else "#ffab00")
+    rsi_c   = "#10b981"       if rsi_v<30  else ("#ef4444"      if rsi_v>70  else "#f59e0b")
     mac_sig = "BULLISH ▲"    if macd_v>0  else "BEARISH ▼"
-    mac_c   = "#00e676"       if macd_v>0  else "#ff1744"
+    mac_c   = "#10b981"       if macd_v>0  else "#ef4444"
     bb_sig  = "OVERSOLD ▲"   if bb_v<0.2  else ("OVERBOUGHT ▼" if bb_v>0.8  else "NEUTRAL")
-    bb_c    = "#00e676"       if bb_v<0.2  else ("#ff1744"      if bb_v>0.8  else "#ffab00")
+    bb_c    = "#10b981"       if bb_v<0.2  else ("#ef4444"      if bb_v>0.8  else "#f59e0b")
 
     st.markdown(f"""
     <div class="ind-row">
@@ -870,79 +830,57 @@ with tab4:
         <div class="ind-name">RSI (14)</div>
         <div class="ind-val">{rsi_v:.1f}</div>
         <div class="ind-sig" style="color:{rsi_c}">{rsi_sig}</div>
-        <div style="font-size:0.65rem;color:#8b949e;margin-top:0.4rem;">Oversold &lt;30 · Overbought &gt;70</div>
+        <div style="font-size:0.65rem;color:#64748b;margin-top:0.4rem;">Oversold &lt;30 · Overbought &gt;70</div>
       </div>
       <div class="ind-card">
         <div class="ind-name">MACD Histogram</div>
         <div class="ind-val">{'+'if macd_v>=0 else ''}{macd_v:.3f}</div>
         <div class="ind-sig" style="color:{mac_c}">{mac_sig}</div>
-        <div style="font-size:0.65rem;color:#8b949e;margin-top:0.4rem;">EMA(12) − EMA(26) − Signal(9)</div>
+        <div style="font-size:0.65rem;color:#64748b;margin-top:0.4rem;">EMA(12) − EMA(26) − Signal(9)</div>
       </div>
       <div class="ind-card">
         <div class="ind-name">Bollinger %B</div>
         <div class="ind-val">{bb_v:.2f}</div>
         <div class="ind-sig" style="color:{bb_c}">{bb_sig}</div>
-        <div style="font-size:0.65rem;color:#8b949e;margin-top:0.4rem;">0 = Lower Band · 1 = Upper Band</div>
+        <div style="font-size:0.65rem;color:#64748b;margin-top:0.4rem;">0 = Lower Band · 1 = Upper Band</div>
       </div>
     </div>""", unsafe_allow_html=True)
 
     if len(df) > 0:
         import plotly.graph_objects as go
         from plotly.subplots import make_subplots
-
-        fig2 = make_subplots(
-            rows=3, cols=1, shared_xaxes=True,
-            row_heights=[0.42, 0.28, 0.30], vertical_spacing=0.04,
-            subplot_titles=["Price + Bollinger Bands", "RSI (14)", "MACD"],
-        )
+        fig2 = make_subplots(rows=3, cols=1, shared_xaxes=True, row_heights=[0.42, 0.28, 0.30],
+                             vertical_spacing=0.04, subplot_titles=["Price + Bollinger Bands", "RSI (14)", "MACD"])
         tail = df.tail(120)
 
-        # Price + BB
         fig2.add_trace(go.Scatter(x=tail.index, y=tail["Close"], name="Price",
-                                   line=dict(color="#c9d1d9", width=1.8),
-                                   hovertemplate="$%{y:.2f}<extra></extra>"), row=1, col=1)
+            line=dict(color="#334155", width=1.8)), row=1, col=1)
         fig2.add_trace(go.Scatter(x=tail.index, y=tail["BB_upper"], name="BB Upper",
-                                   line=dict(color="rgba(41,121,255,0.6)", width=1, dash="dot"),
-                                   showlegend=False, hoverinfo="skip"), row=1, col=1)
+            line=dict(color="#3b82f6", width=1, dash="dot")), row=1, col=1)
         fig2.add_trace(go.Scatter(x=tail.index, y=tail["BB_lower"], name="BB Lower",
-                                   line=dict(color="rgba(41,121,255,0.6)", width=1, dash="dot"),
-                                   fill="tonexty", fillcolor="rgba(41,121,255,0.06)",
-                                   showlegend=False, hoverinfo="skip"), row=1, col=1)
+            line=dict(color="#3b82f6", width=1, dash="dot"), fill="tonexty", fillcolor="rgba(59,130,246,0.06)"), row=1, col=1)
 
-        # RSI
         fig2.add_trace(go.Scatter(x=tail.index, y=tail["RSI"], name="RSI",
-                                   line=dict(color="#ffab00", width=1.6),
-                                   hovertemplate="RSI: %{y:.1f}<extra></extra>"), row=2, col=1)
-        fig2.add_hline(y=70, line_dash="dot", line_color="rgba(255,23,68,0.5)",  row=2, col=1)
-        fig2.add_hline(y=30, line_dash="dot", line_color="rgba(0,230,118,0.5)",  row=2, col=1)
-        fig2.add_hrect(y0=30, y1=70, fillcolor="rgba(255,171,0,0.03)",
-                       line_width=0, row=2, col=1)
+            line=dict(color="#f59e0b", width=1.6)), row=2, col=1)
+        fig2.add_hline(y=70, line_dash="dot", line_color="#ef4444", row=2, col=1)
+        fig2.add_hline(y=30, line_dash="dot", line_color="#10b981", row=2, col=1)
 
-        # MACD
-        colors_m = ["#00e676" if v>=0 else "#ff1744" for v in tail["MACD_hist"]]
-        fig2.add_trace(go.Bar(x=tail.index, y=tail["MACD_hist"], name="Histogram",
-                               marker_color=colors_m, opacity=0.75), row=3, col=1)
-        fig2.add_trace(go.Scatter(x=tail.index, y=tail["MACD"], name="MACD",
-                                   line=dict(color="#2979ff", width=1.4)), row=3, col=1)
-        fig2.add_trace(go.Scatter(x=tail.index, y=tail["MACD_signal"], name="Signal",
-                                   line=dict(color="#ff4081", width=1.4)), row=3, col=1)
+        colors_m = ["#10b981" if v>=0 else "#ef4444" for v in tail["MACD_hist"]]
+        fig2.add_trace(go.Bar(x=tail.index, y=tail["MACD_hist"], name="Histogram", marker_color=colors_m, opacity=0.75), row=3, col=1)
+        fig2.add_trace(go.Scatter(x=tail.index, y=tail["MACD"], name="MACD", line=dict(color="#3b82f6", width=1.4)), row=3, col=1)
+        fig2.add_trace(go.Scatter(x=tail.index, y=tail["MACD_signal"], name="Signal", line=dict(color="#ec4899", width=1.4)), row=3, col=1)
 
         fig2.update_layout(
             height=520,
-            paper_bgcolor="rgba(0,0,0,0)",
-            plot_bgcolor="rgba(13,17,23,0.9)",
-            font=dict(family="Space Mono", color="#8b949e", size=9),
+            paper_bgcolor="#ffffff",
+            plot_bgcolor="#f8fafc",
+            font=dict(family="Space Mono", color="#64748b", size=9),
             showlegend=False,
             margin=dict(l=4, r=4, t=25, b=4),
-            hoverlabel=dict(bgcolor="#161b22", bordercolor="#21262d",
-                            font=dict(family="Space Mono", size=10, color="#f0f6fc")),
+            hoverlabel=dict(bgcolor="#f1f5f9", bordercolor="#e2e8f0", font=dict(family="Space Mono", size=10, color="#111827")),
         )
-        # FIX 8: remove weekend gaps in indicator chart too
-        fig2.update_xaxes(
-            gridcolor="rgba(33,38,45,0.6)", zeroline=False,
-            rangebreaks=[dict(bounds=["sat","mon"])],
-        )
-        fig2.update_yaxes(gridcolor="rgba(33,38,45,0.6)", zeroline=False)
+        fig2.update_xaxes(gridcolor="rgba(226,232,240,0.6)", zeroline=False, rangebreaks=[dict(bounds=["sat","mon"])])
+        fig2.update_yaxes(gridcolor="rgba(226,232,240,0.6)", zeroline=False)
         for ann in fig2.layout.annotations:
-            ann.font = dict(size=9, color="#c9d1d9", family="Space Mono")
+            ann.font = dict(size=9, color="#64748b", family="Space Mono")
         st.plotly_chart(fig2, use_container_width=True, config={"displayModeBar": False})
