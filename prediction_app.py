@@ -480,8 +480,7 @@ with st.sidebar:
     retrain = st.button("⟳  Force Retrain")
     st.markdown("""
     <div style="margin-top:2rem;font-family:'Space Mono',monospace;font-size:0.62rem;color:#64748b;">
-    SIGNAL v1.2 • Light Mode<br>Models: SARIMAX · Prophet · Hybrid<br>
-    Indicators: RSI · MACD · Bollinger<br>Cache: .model_chance • ET timezone
+    created by SIGNAL<br>Models: SARIMAX · Prophet · Hybrid<br>
     </div>""", unsafe_allow_html=True)
 
 
