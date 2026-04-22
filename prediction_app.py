@@ -666,7 +666,7 @@ with tab1:
             mode="lines",
             line=dict(
                 color="rgba(220, 200, 170, 0.22)",  # soft warm grey-orange
-                width=500  # lebih lebar dari sebelumnya
+                width=50  # lebih lebar dari sebelumnya
             ),
             hoverinfo="skip",
             showlegend=False
