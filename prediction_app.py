@@ -662,7 +662,7 @@ with tab1:
             x=fc_dates + fc_dates[::-1],
             y=ci_hi_arr.tolist() + ci_lo_arr.tolist()[::-1],
             fill="toself",
-            fillcolor="rgba(210, 200, 180, 1)",  # warm grey with slight orange
+            fillcolor="rgba(210, 200, 180, 50)",  # warm grey with slight orange
             line=dict(color="rgba(0,0,0,0)"),      # keep border invisible
             name="80% Confidence Interval",
             hoverinfo="skip"
