@@ -186,7 +186,7 @@ def market_status(now: datetime) -> str:
     if pre <= t < open_:
         return "PRE-MARKET"
     elif open_ <= t < close:
-        return "● OPEN"
+        return "OPEN"
     elif close <= t < ext:
         return "AFTER-HOURS"
     else:
