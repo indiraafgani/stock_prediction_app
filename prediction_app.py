@@ -657,20 +657,33 @@ with tab1:
         fig.add_trace(go.Scatter(x=junction_x, y=junction_y, mode="lines",
             line=dict(color=sig_color, width=1.5, dash="dot"), showlegend=False, hoverinfo="skip"), row=1, col=1)
 
-        # Forecast line
-        # === SHADOW LINE (add this BEFORE your main forecast line) ===
-        fig.add_trace(go.Scatter(
-            x=fc_dates,
-            y=fc_arr,
-            mode="lines",
-            line=dict(
-                color="rgba(220, 200, 170, 0.25)",  # light orange-grey shadow
-                width=30  # besar = efek shadow (≈ “size 25 feel”)
-            ),
-            hoverinfo="skip",
-            showlegend=False
-        ), row=1, col=1)
         
+        # Forecast line
+        # === CONE-LIKE SHADOW (narrow → wide) ===
+        n_segments = 6
+        segment_length = len(fc_arr) // n_segments
+        
+        for i in range(n_segments):
+            start = i * segment_length
+            end = (i + 1) * segment_length if i < n_segments - 1 else len(fc_arr)
+        
+            # makin ke kanan makin tebal
+            width = 4 + i * 3  
+            
+            # makin ke kanan makin soft
+            opacity = 0.25 - i * 0.03  
+        
+            fig.add_trace(go.Scatter(
+                x=fc_dates[start:end],
+                y=fc_arr[start:end],
+                mode="lines",
+                line=dict(
+                    color=f"rgba(220, 200, 170, {opacity})",
+                    width=width
+                ),
+                hoverinfo="skip",
+                showlegend=False
+            ), row=1, col=1)
         
         # === MAIN FORECAST LINE (your original, unchanged structure) ===
         fig.add_trace(go.Scatter(
