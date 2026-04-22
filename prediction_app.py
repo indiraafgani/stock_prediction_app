@@ -659,25 +659,18 @@ with tab1:
 
         
         # Forecast line
-        # === TAPERED SHADOW (mengerucut → melebar) ===
-        n_segments = 8
-        segment_length = len(fc_arr) // n_segments
-        
-        for i in range(n_segments):
-            start = i * segment_length
-            end = (i + 1) * segment_length if i < n_segments - 1 else len(fc_arr)
-        
-            fig.add_trace(go.Scatter(
-                x=fc_dates[start:end],
-                y=fc_arr[start:end],
-                mode="lines",
-                line=dict(
-                    color="rgba(220, 200, 170, 0.22)",  # tetap warna kamu
-                    width=10 + i * 20  # dari kecil → besar (mengerucut ke kanan)
-                ),
-                hoverinfo="skip",
-                showlegend=False
-            ), row=1, col=1)
+        # === WIDER SHADOW ===
+        fig.add_trace(go.Scatter(
+            x=fc_dates,
+            y=fc_arr,
+            mode="lines",
+            line=dict(
+                color="rgba(220, 200, 170, 0.22)",  # soft warm grey-orange
+                width=500  # lebih lebar dari sebelumnya
+            ),
+            hoverinfo="skip",
+            showlegend=False
+        ), row=1, col=1)
 
         # === MAIN FORECAST LINE (your original, unchanged structure) ===
         fig.add_trace(go.Scatter(
