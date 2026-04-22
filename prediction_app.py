@@ -658,9 +658,17 @@ with tab1:
             line=dict(color=sig_color, width=1.5, dash="dot"), showlegend=False, hoverinfo="skip"), row=1, col=1)
 
         # CI Fill
-        fig.add_trace(go.Scatter(x=fc_dates + fc_dates[::-1], y=ci_hi_arr.tolist() + ci_lo_arr.tolist()[::-1],
-            fill="toself", fillcolor=ci_fill, line=dict(color="rgba(200, 190, 170, 0.3)"),
-            name="80% Confidence Interval", hoverinfo="skip"), row=1, col=1)
+        ci_fill = "rgba(210, 200, 180, 0.35)"
+
+        fig.add_trace(go.Scatter(
+            x=fc_dates.tolist() + fc_dates[::-1].tolist(),
+            y=ci_hi_arr.tolist() + ci_lo_arr[::-1].tolist(),
+            fill="toself",
+            fillcolor=ci_fill,
+            line=dict(color="rgba(0,0,0,0)"),  # no border
+            name="80% Confidence Interval",
+            hoverinfo="skip"
+        ), row=1, col=1)
 
         # CI Borders (FIXED - using hex_to_rgba)
         ci_border_color = hex_to_rgba(sig_color, 0.45)
@@ -686,10 +694,23 @@ with tab1:
 
         # Volume
         if "Volume" in hist_df.columns:
-            v_colors = ["#10b981" if c>=o else "#ef4444" for c,o in zip(hist_df["Close"], hist_df["Open"])]
-            fig.add_trace(go.Bar(x=hist_dates, y=hist_df["Volume"].tolist(),
-                name="Volume", marker_color=v_colors, opacity=0.55,
-                hovertemplate="<b>%{x|%b %d}</b><br>Vol: %{y:,.0f}<extra></extra>"), row=2, col=1)
+            v_colors = [
+                "#10b981" if c >= o else "#ef4444"
+                for c, o in zip(hist_df["Close"], hist_df["Open"])
+            ]
+        
+            fig.add_trace(
+                go.Bar(
+                    x=hist_dates,
+                    y=hist_df["Volume"].tolist(),
+                    name="Volume",
+                    marker=dict(color=v_colors),  # stronger per-bar control
+                    opacity=0.85,  # keep higher for clearer split visibility
+                    hovertemplate="<b>%{x|%b %d}</b><br>Vol: %{y:,.0f}<extra></extra>"
+                ),
+                row=2,
+                col=1
+            )
 
         fig.update_layout(
             height=520,
