@@ -657,32 +657,31 @@ with tab1:
         fig.add_trace(go.Scatter(x=junction_x, y=junction_y, mode="lines",
             line=dict(color=sig_color, width=1.5, dash="dot"), showlegend=False, hoverinfo="skip"), row=1, col=1)
 
-        # CI Fill
-        fig.add_trace(go.Scatter(
-            x=fc_dates + fc_dates[::-1],
-            y=ci_hi_arr.tolist() + ci_lo_arr.tolist()[::-1],
-            fill="toself",
-            fillcolor="rgba(210, 200, 180, 50)",  # warm grey with slight orange
-            line=dict(color="rgba(0,0,0,0)"),      # keep border invisible
-            name="80% Confidence Interval",
-            hoverinfo="skip"
-        ), row=1, col=1)
-
-        # CI Borders (FIXED - using hex_to_rgba)
-        ci_border_color = hex_to_rgba(sig_color, 0.45)
-        fig.add_trace(go.Scatter(x=fc_dates, y=ci_hi_arr, mode="lines", name="CI Upper",
-            line=dict(color=ci_border_color, width=0.9, dash="dot"),
-            showlegend=False, hoverinfo="skip"), row=1, col=1)
-        fig.add_trace(go.Scatter(x=fc_dates, y=ci_lo_arr, mode="lines", name="CI Lower",
-            line=dict(color=ci_border_color, width=0.9, dash="dot"),
-            showlegend=False, hoverinfo="skip"), row=1, col=1)
-
         # Forecast line
-        fig.add_trace(go.Scatter(x=fc_dates, y=fc_arr, mode="lines+markers",
+        # === SHADOW LINE (add this BEFORE your main forecast line) ===
+        fig.add_trace(go.Scatter(
+            x=fc_dates,
+            y=fc_arr,
+            mode="lines",
+            line=dict(
+                color="rgba(220, 200, 170, 0.25)",  # light orange-grey shadow
+                width=8  # besar = efek shadow (≈ “size 25 feel”)
+            ),
+            hoverinfo="skip",
+            showlegend=False
+        ), row=1, col=1)
+        
+        
+        # === MAIN FORECAST LINE (your original, unchanged structure) ===
+        fig.add_trace(go.Scatter(
+            x=fc_dates,
+            y=fc_arr,
+            mode="lines+markers",
             name=f"Forecast · {best_model}",
             line=dict(color=sig_color, width=2.5),
             marker=dict(size=5, color=sig_color, line=dict(color="#ffffff", width=1.5)),
-            hovertemplate="<b>%{x|%b %d %Y}</b><br>Forecast: $%{y:.2f}<extra></extra>"), row=1, col=1)
+            hovertemplate="<b>%{x|%b %d %Y}</b><br>Forecast: $%{y:.2f}<extra></extra>"
+        ), row=1, col=1)
 
         # Current price line
         fig.add_hline(y=price_info["price"], line_dash="dot",
