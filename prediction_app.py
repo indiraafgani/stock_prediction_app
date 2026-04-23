@@ -117,9 +117,12 @@ html,body,[class*="css"]{font-family:'Syne',sans-serif;background-color:var(--bg
 .sec-hdr{font-size:0.65rem;color:var(--muted);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.1em;padding-bottom:0.4rem;border-bottom:1px solid var(--border);margin-bottom:0.8rem;}
 
 /* SIDEBAR */
-[data-testid="stSidebar"]{background:var(--bg2) !important;border-right:1px solid var(--border) !important;}
+[data-testid="stSidebar"]{background:var(--bg2) !important;border-right:1px solid var(--border) !important;transition:transform 0.3s ease !important;}
 [data-testid="stSidebar"] .block-container{padding:1rem;}
 .sidebar-logo{font-family:'Space Mono',monospace;font-size:1.1rem;color:var(--accent);font-weight:700;margin-bottom:1.5rem;padding-bottom:0.8rem;border-bottom:1px solid var(--border);}
+/* Hide Streamlit's native collapse arrow */
+[data-testid="stSidebarCollapseButton"]{display:none !important;}
+[data-testid="collapsedControl"]{display:none !important;}
 
 /* STREAMLIT OVERRIDES */
 .stSelectbox>div>div{background:var(--card) !important;border-color:var(--border) !important;color:var(--text) !important;}
@@ -493,27 +496,63 @@ now_str     = now_et_dt.strftime("%a %b %d %Y  ·  %I:%M:%S %p ET")
 mkt_status  = market_status(now_et_dt)
 mkt_color   = "#10b981" if "OPEN" in mkt_status else ("#f59e0b" if "HOURS" in mkt_status or "PRE" in mkt_status else "#64748b")
 
+import streamlit.components.v1 as _components
+_components.html("""
+<script>
+// Wait for parent DOM then inject a persistent toggle button fixed to top-left
+(function waitAndInject() {
+  var doc = window.parent.document;
+  if (!doc || !doc.body) { setTimeout(waitAndInject, 100); return; }
+
+  // Remove any previous injected burger
+  var old = doc.getElementById('sgnl-burger');
+  if (old) old.remove();
+
+  var btn = doc.createElement('button');
+  btn.id = 'sgnl-burger';
+  btn.title = 'Toggle sidebar';
+  btn.innerHTML = '<span></span><span></span><span></span>';
+  btn.style.cssText = [
+    'position:fixed','top:14px','left:14px','z-index:99999',
+    'background:#ffffff','border:1px solid #e2e8f0','border-radius:6px',
+    'width:34px','height:34px','cursor:pointer',
+    'display:flex','flex-direction:column','align-items:center',
+    'justify-content:center','gap:4px','padding:0',
+    'box-shadow:0 1px 4px rgba(0,0,0,0.08)','transition:border-color 0.2s'
+  ].join(';');
+
+  var lines = btn.querySelectorAll ? btn.querySelectorAll('span') : [];
+  btn.addEventListener('mouseover', function(){ btn.style.borderColor='#10b981'; });
+  btn.addEventListener('mouseout',  function(){ btn.style.borderColor='#e2e8f0'; });
+
+  btn.onclick = function() {
+    var sb = doc.querySelector('[data-testid="stSidebar"]');
+    if (!sb) return;
+    var isHidden = sb.getAttribute('data-sgnl') === '1';
+    if (isHidden) {
+      sb.style.cssText = '';
+      sb.setAttribute('data-sgnl', '0');
+    } else {
+      sb.style.cssText = 'transform:translateX(-120%) !important;visibility:hidden !important;position:fixed !important;top:0 !important;';
+      sb.setAttribute('data-sgnl', '1');
+    }
+  };
+
+  // Style the inner spans
+  var style = doc.createElement('style');
+  style.id = 'sgnl-burger-style';
+  var oldStyle = doc.getElementById('sgnl-burger-style');
+  if (oldStyle) oldStyle.remove();
+  style.textContent = '#sgnl-burger span{display:block;width:14px;height:2px;background:#64748b;border-radius:2px;}';
+  doc.head.appendChild(style);
+  doc.body.appendChild(btn);
+})();
+</script>
+""", height=0)
+
 st.markdown(f"""
 <div class="nav-bar">
-  <div style="display:flex;align-items:center;gap:0.8rem;">
-    <button class="burger-btn" onclick="(function(){{
-      var doc = window.parent.document;
-      var sb = doc.querySelector('[data-testid=stSidebar]');
-      if(!sb) return;
-      var isHidden = sb.getAttribute('data-sgnl') === '1';
-      if(isHidden){{
-        sb.style.cssText = '';
-        sb.setAttribute('data-sgnl','0');
-      }} else {{
-        sb.style.transform = 'translateX(-110%)';
-        sb.style.visibility = 'hidden';
-        sb.style.position = 'fixed';
-        sb.style.top = '0';
-        sb.setAttribute('data-sgnl','1');
-      }}
-    }}())" title="Toggle sidebar">
-      <span></span><span></span><span></span>
-    </button>
+  <div style="padding-left:2.8rem;">
     <div class="nav-logo">◈ SIGNAL<span>·ai</span></div>
   </div>
   <div class="nav-time">{now_str}</div>
