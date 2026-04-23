@@ -496,11 +496,22 @@ mkt_color   = "#10b981" if "OPEN" in mkt_status else ("#f59e0b" if "HOURS" in mk
 st.markdown(f"""
 <div class="nav-bar">
   <div style="display:flex;align-items:center;gap:0.8rem;">
-    <button class="burger-btn" onclick="
-      var sidebar = window.parent.document.querySelector('[data-testid=stSidebar]');
-      var btn = window.parent.document.querySelector('[data-testid=stSidebarCollapseButton] button');
-      if(btn){{btn.click();}}
-    " title="Toggle sidebar">
+    <button class="burger-btn" onclick="(function(){{
+      var doc = window.parent.document;
+      var sb = doc.querySelector('[data-testid=stSidebar]');
+      if(!sb) return;
+      var isHidden = sb.getAttribute('data-sgnl') === '1';
+      if(isHidden){{
+        sb.style.cssText = '';
+        sb.setAttribute('data-sgnl','0');
+      }} else {{
+        sb.style.transform = 'translateX(-110%)';
+        sb.style.visibility = 'hidden';
+        sb.style.position = 'fixed';
+        sb.style.top = '0';
+        sb.setAttribute('data-sgnl','1');
+      }}
+    }}())" title="Toggle sidebar">
       <span></span><span></span><span></span>
     </button>
     <div class="nav-logo">◈ SIGNAL<span>·ai</span></div>
