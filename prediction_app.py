@@ -31,7 +31,9 @@ st.markdown("""
 *{box-sizing:border-box;}
 html,body,[class*="css"]{font-family:'Syne',sans-serif;background-color:var(--bg);color:var(--text);}
 #MainMenu,footer{visibility:hidden;}
-header{visibility:hidden;}
+header{
+  background: transparent;
+}
 /* But keep the sidebar collapse/expand button always visible */
 header [data-testid="stSidebarCollapseButton"],
 [data-testid="collapsedControl"]{visibility:visible !important;display:flex !important;opacity:1 !important;}
