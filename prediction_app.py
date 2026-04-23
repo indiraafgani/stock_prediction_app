@@ -701,22 +701,25 @@ with tab1:
         ), row=1, col=1)
 
         # ── 4. CI shadow band (upper then lower with tonexty fill) ───────────
-        # Upper boundary — invisible line, anchor for fill
+        # Expand CI bounds to make shadow more visible
+        ci_expand = float(df["Close"].std()) * 0.08
+        ci_hi_wide = ci_hi_arr + ci_expand
+        ci_lo_wide = ci_lo_arr - ci_expand
+
         fig.add_trace(go.Scatter(
-            x=fc_dates, y=list(ci_hi_arr),
+            x=fc_dates, y=list(ci_hi_wide),
             mode="lines",
-            line=dict(color="rgba(99,102,241,0.15)", width=0.5),
+            line=dict(color="rgba(210,195,140,0.25)", width=0.5),
             showlegend=False,
             hoverinfo="skip",
             name="_ci_upper"
         ), row=1, col=1)
-        # Lower boundary — fills back up to upper, creating the shadow
         fig.add_trace(go.Scatter(
-            x=fc_dates, y=list(ci_lo_arr),
+            x=fc_dates, y=list(ci_lo_wide),
             mode="lines",
             fill="tonexty",
-            fillcolor="rgba(99,102,241,0.12)",
-            line=dict(color="rgba(99,102,241,0.15)", width=0.5),
+            fillcolor="rgba(210,195,140,0.28)",
+            line=dict(color="rgba(210,195,140,0.25)", width=0.5),
             showlegend=True,
             name="Confidence Interval",
             hovertemplate="<b>%{x|%b %d %Y}</b><br>CI Low: $%{y:.2f}<extra></extra>"
