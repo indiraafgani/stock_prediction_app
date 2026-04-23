@@ -30,7 +30,11 @@ st.markdown("""
 }
 *{box-sizing:border-box;}
 html,body,[class*="css"]{font-family:'Syne',sans-serif;background-color:var(--bg);color:var(--text);}
-#MainMenu,footer,header{visibility:hidden;}
+#MainMenu,footer{visibility:hidden;}
+header{visibility:hidden;}
+/* But keep the sidebar collapse/expand button always visible */
+header [data-testid="stSidebarCollapseButton"],
+[data-testid="collapsedControl"]{visibility:visible !important;display:flex !important;opacity:1 !important;}
 .stDeployButton{display:none;}
 .block-container{padding:1.5rem 2rem 2rem;max-width:100%;}
 ::-webkit-scrollbar{width:4px;height:4px;}
@@ -118,25 +122,12 @@ html,body,[class*="css"]{font-family:'Syne',sans-serif;background-color:var(--bg
 [data-testid="stSidebar"] .block-container{padding:1rem;}
 .sidebar-logo{font-family:'Space Mono',monospace;font-size:1.1rem;color:var(--accent);font-weight:700;margin-bottom:1.5rem;padding-bottom:0.8rem;border-bottom:1px solid var(--border);}
 
-/* ── Sidebar toggle buttons — fully visible and clickable ── */
-[data-testid="stSidebarCollapseButton"] button,
-[data-testid="collapsedControl"] button {
-  background:var(--card) !important;
-  border:1px solid var(--border) !important;
-  border-radius:6px !important;
-  color:#64748b !important;
-  cursor:pointer !important;
-  transition:border-color 0.2s !important;
-}
-[data-testid="stSidebarCollapseButton"] button:hover,
-[data-testid="collapsedControl"] button:hover {
-  border-color:var(--accent) !important;
-  color:var(--accent) !important;
-}
-[data-testid="stSidebarCollapseButton"] button svg,
-[data-testid="collapsedControl"] button svg {
-  color:inherit !important;
-  fill:currentColor !important;
+/* ── Ensure collapsed expand button is always visible ── */
+[data-testid="collapsedControl"] {
+  display:flex !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  z-index:999999 !important;
 }
 
 /* STREAMLIT OVERRIDES */
