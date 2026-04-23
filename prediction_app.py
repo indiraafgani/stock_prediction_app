@@ -39,9 +39,6 @@ html,body,[class*="css"]{font-family:'Syne',sans-serif;background-color:var(--bg
 
 /* NAV */
 .nav-bar{display:flex;align-items:center;justify-content:space-between;padding:0.9rem 0;margin-bottom:1.5rem;border-bottom:1px solid var(--border);}
-.burger-btn{background:none;border:1px solid var(--border);border-radius:6px;padding:5px 8px;cursor:pointer;display:flex;flex-direction:column;gap:3px;align-items:center;justify-content:center;width:32px;height:32px;transition:border-color 0.2s;}
-.burger-btn:hover{border-color:var(--accent);}
-.burger-btn span{display:block;width:14px;height:2px;background:#64748b;border-radius:2px;}
 .nav-logo{font-family:'Space Mono',monospace;font-size:1.4rem;font-weight:700;color:var(--accent);letter-spacing:-0.03em;}
 .nav-logo span{color:var(--muted);}
 .nav-time{font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--muted);}
@@ -117,12 +114,50 @@ html,body,[class*="css"]{font-family:'Syne',sans-serif;background-color:var(--bg
 .sec-hdr{font-size:0.65rem;color:var(--muted);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.1em;padding-bottom:0.4rem;border-bottom:1px solid var(--border);margin-bottom:0.8rem;}
 
 /* SIDEBAR */
-[data-testid="stSidebar"]{background:var(--bg2) !important;border-right:1px solid var(--border) !important;transition:transform 0.3s ease !important;}
+[data-testid="stSidebar"]{background:var(--bg2) !important;border-right:1px solid var(--border) !important;}
 [data-testid="stSidebar"] .block-container{padding:1rem;}
 .sidebar-logo{font-family:'Space Mono',monospace;font-size:1.1rem;color:var(--accent);font-weight:700;margin-bottom:1.5rem;padding-bottom:0.8rem;border-bottom:1px solid var(--border);}
-/* Hide Streamlit's native collapse arrow */
-[data-testid="stSidebarCollapseButton"]{display:none !important;}
-[data-testid="collapsedControl"]{display:none !important;}
+
+/* ── Restyle Streamlit's native sidebar collapse button → burger icon ── */
+[data-testid="stSidebarCollapseButton"] button,
+[data-testid="collapsedControl"] button {
+  width:36px !important; height:36px !important;
+  background:var(--card) !important;
+  border:1px solid var(--border) !important;
+  border-radius:6px !important;
+  box-shadow:0 1px 4px rgba(0,0,0,0.07) !important;
+  color:transparent !important;
+  display:flex !important; align-items:center !important; justify-content:center !important;
+  cursor:pointer !important;
+  position:relative !important;
+  overflow:hidden !important;
+  transition:border-color 0.2s !important;
+}
+[data-testid="stSidebarCollapseButton"] button:hover,
+[data-testid="collapsedControl"] button:hover {
+  border-color:var(--accent) !important;
+}
+/* Hide the original SVG arrow icon */
+[data-testid="stSidebarCollapseButton"] button svg,
+[data-testid="collapsedControl"] button svg {
+  display:none !important;
+}
+/* Draw three burger lines using pseudo-elements + box-shadow trick */
+[data-testid="stSidebarCollapseButton"] button::before,
+[data-testid="collapsedControl"] button::before {
+  content:'' !important;
+  display:block !important;
+  width:14px !important; height:2px !important;
+  background:#64748b !important;
+  border-radius:2px !important;
+  box-shadow:0 5px 0 #64748b, 0 -5px 0 #64748b !important;
+  position:absolute !important;
+}
+[data-testid="stSidebarCollapseButton"] button:hover::before,
+[data-testid="collapsedControl"] button:hover::before {
+  background:var(--accent) !important;
+  box-shadow:0 5px 0 var(--accent), 0 -5px 0 var(--accent) !important;
+}
 
 /* STREAMLIT OVERRIDES */
 .stSelectbox>div>div{background:var(--card) !important;border-color:var(--border) !important;color:var(--text) !important;}
@@ -496,65 +531,9 @@ now_str     = now_et_dt.strftime("%a %b %d %Y  ·  %I:%M:%S %p ET")
 mkt_status  = market_status(now_et_dt)
 mkt_color   = "#10b981" if "OPEN" in mkt_status else ("#f59e0b" if "HOURS" in mkt_status or "PRE" in mkt_status else "#64748b")
 
-import streamlit.components.v1 as _components
-_components.html("""
-<script>
-// Wait for parent DOM then inject a persistent toggle button fixed to top-left
-(function waitAndInject() {
-  var doc = window.parent.document;
-  if (!doc || !doc.body) { setTimeout(waitAndInject, 100); return; }
-
-  // Remove any previous injected burger
-  var old = doc.getElementById('sgnl-burger');
-  if (old) old.remove();
-
-  var btn = doc.createElement('button');
-  btn.id = 'sgnl-burger';
-  btn.title = 'Toggle sidebar';
-  btn.innerHTML = '<span></span><span></span><span></span>';
-  btn.style.cssText = [
-    'position:fixed','top:14px','left:14px','z-index:99999',
-    'background:#ffffff','border:1px solid #e2e8f0','border-radius:6px',
-    'width:34px','height:34px','cursor:pointer',
-    'display:flex','flex-direction:column','align-items:center',
-    'justify-content:center','gap:4px','padding:0',
-    'box-shadow:0 1px 4px rgba(0,0,0,0.08)','transition:border-color 0.2s'
-  ].join(';');
-
-  var lines = btn.querySelectorAll ? btn.querySelectorAll('span') : [];
-  btn.addEventListener('mouseover', function(){ btn.style.borderColor='#10b981'; });
-  btn.addEventListener('mouseout',  function(){ btn.style.borderColor='#e2e8f0'; });
-
-  btn.onclick = function() {
-    var sb = doc.querySelector('[data-testid="stSidebar"]');
-    if (!sb) return;
-    var isHidden = sb.getAttribute('data-sgnl') === '1';
-    if (isHidden) {
-      sb.style.cssText = '';
-      sb.setAttribute('data-sgnl', '0');
-    } else {
-      sb.style.cssText = 'transform:translateX(-120%) !important;visibility:hidden !important;position:fixed !important;top:0 !important;';
-      sb.setAttribute('data-sgnl', '1');
-    }
-  };
-
-  // Style the inner spans
-  var style = doc.createElement('style');
-  style.id = 'sgnl-burger-style';
-  var oldStyle = doc.getElementById('sgnl-burger-style');
-  if (oldStyle) oldStyle.remove();
-  style.textContent = '#sgnl-burger span{display:block;width:14px;height:2px;background:#64748b;border-radius:2px;}';
-  doc.head.appendChild(style);
-  doc.body.appendChild(btn);
-})();
-</script>
-""", height=0)
-
 st.markdown(f"""
 <div class="nav-bar">
-  <div style="padding-left:2.8rem;">
-    <div class="nav-logo">◈ SIGNAL<span>·ai</span></div>
-  </div>
+  <div class="nav-logo">◈ SIGNAL<span>·ai</span></div>
   <div class="nav-time">{now_str}</div>
   <div class="nav-status">
     <div class="status-dot" style="background:{mkt_color};box-shadow:0 0 6px {mkt_color};"></div>
@@ -687,7 +666,7 @@ with tab1:
             )
         days_map = {"1 Month": 30, "3 Months": 90, "6 Months": 180}
         max_days = days_map[hist_option]
-        hist_df = df.tail(max_days * 2).iloc[-max_days:]  # conservative
+        hist_df = df.tail(max_days * 2).iloc[-max_days:]
 
         hist_dates = hist_df.index.tolist()
         hist_close = hist_df["Close"].tolist()
