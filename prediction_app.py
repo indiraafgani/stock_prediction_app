@@ -118,6 +118,11 @@ html,body,[class*="css"]{font-family:'Syne',sans-serif;background-color:var(--bg
 [data-testid="stSidebar"] .block-container{padding:1rem;}
 .sidebar-logo{font-family:'Space Mono',monospace;font-size:1.1rem;color:var(--accent);font-weight:700;margin-bottom:1.5rem;padding-bottom:0.8rem;border-bottom:1px solid var(--border);}
 
+/* BURGER TOGGLE */
+.burger-wrap{display:inline-flex;align-items:center;gap:0.5rem;margin-bottom:0.6rem;}
+.burger-icon{display:flex;flex-direction:column;gap:4px;cursor:pointer;padding:5px 7px;border-radius:6px;border:1px solid var(--border);background:var(--card);box-shadow:0 1px 3px rgba(0,0,0,0.06);}
+.burger-icon span{display:block;width:16px;height:2px;background:#64748b;border-radius:2px;}
+
 /* STREAMLIT OVERRIDES */
 .stSelectbox>div>div{background:var(--card) !important;border-color:var(--border) !important;color:var(--text) !important;}
 label{color:#334155 !important;font-size:0.78rem !important;font-weight:600 !important;}
@@ -469,19 +474,44 @@ def run_pipeline(ticker, horizon, method, force_retrain=False):
     return payload
 
 
+# ─── Sidebar Toggle State ────────────────────────────────────────────────────
+if "sidebar_open" not in st.session_state:
+    st.session_state.sidebar_open = True
+
 # ─── Sidebar ──────────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.markdown('<div class="sidebar-logo">◈ SIGNAL</div>', unsafe_allow_html=True)
-    ticker  = st.selectbox("Choose the stock:",  list(TICKERS.keys()),
-                            format_func=lambda x: f"{x} — {TICKERS[x][:22]}")
-    horizon = st.selectbox("Time Horizon", list(HORIZONS.keys()), index=1)
-    method  = st.selectbox("Forecast Method",    METHODS, index=0)
-    st.markdown("---")
-    retrain = st.button("⟳  Force Retrain")
-    st.markdown("""
-    <div style="margin-top:2rem;font-family:'Space Mono',monospace;font-size:0.62rem;color:#64748b;">
-    created by SIGNAL<br>Models: SARIMAX · Prophet · Hybrid<br>
-    </div>""", unsafe_allow_html=True)
+    # Burger button row
+    burger_col, logo_col = st.columns([1, 4])
+    with burger_col:
+        if st.button("☰", key="burger_toggle", help="Minimize / Maximize sidebar",
+                     use_container_width=False):
+            st.session_state.sidebar_open = not st.session_state.sidebar_open
+    with logo_col:
+        st.markdown('<div class="sidebar-logo" style="margin-bottom:0;border-bottom:none;padding-bottom:0;">◈ SIGNAL</div>', unsafe_allow_html=True)
+
+    st.markdown('<hr style="margin:0.8rem 0;border-color:var(--border);">', unsafe_allow_html=True)
+
+    if st.session_state.sidebar_open:
+        ticker  = st.selectbox("Choose the stock:",  list(TICKERS.keys()),
+                                format_func=lambda x: f"{x} — {TICKERS[x][:22]}")
+        horizon = st.selectbox("Time Horizon", list(HORIZONS.keys()), index=1)
+        method  = st.selectbox("Forecast Method",    METHODS, index=0)
+        st.markdown("---")
+        retrain = st.button("⟳  Force Retrain")
+        st.markdown("""
+        <div style="margin-top:2rem;font-family:'Space Mono',monospace;font-size:0.62rem;color:#64748b;">
+        created by SIGNAL<br>Models: SARIMAX · Prophet · Hybrid<br>
+        </div>""", unsafe_allow_html=True)
+    else:
+        # Collapsed state: use defaults so pipeline still runs
+        ticker  = list(TICKERS.keys())[0]
+        horizon = list(HORIZONS.keys())[1]
+        method  = METHODS[0]
+        retrain = False
+        st.markdown(
+            '<div style="font-family:\'Space Mono\',monospace;font-size:0.6rem;color:#64748b;text-align:center;">Click ☰<br>to expand</div>',
+            unsafe_allow_html=True
+        )
 
 
 # ─── Nav Bar ──────────────────────────────────────────────────────────────────
@@ -607,22 +637,25 @@ with tab1:
         import plotly.graph_objects as go
         from plotly.subplots import make_subplots
 
-        # ── Historical period filter (NEW) ───────────────────────────────────
-        st.markdown("**Historical Data Period**")
-        hist_option = st.radio(
-            "Show history for the chart:",
-            ["1 Month", "3 Months", "6 Months", "All Available"],
-            horizontal=True,
-            index=1
-        )
-        days_map = {"1 Month": 30, "3 Months": 90, "6 Months": 180, "All Available": None}
+        # ── Historical period filter ──────────────────────────────────────────
+        col_title, col_radio = st.columns([1, 2])
+        with col_title:
+            st.markdown(
+                '<div style="font-family:\'Space Mono\',monospace;font-size:0.72rem;'
+                'font-weight:700;color:#334155;padding-top:0.55rem;">Historical Data Period</div>',
+                unsafe_allow_html=True
+            )
+        with col_radio:
+            hist_option = st.radio(
+                "",
+                ["1 Month", "3 Months", "6 Months"],
+                horizontal=True,
+                index=1,
+                label_visibility="collapsed"
+            )
+        days_map = {"1 Month": 30, "3 Months": 90, "6 Months": 180}
         max_days = days_map[hist_option]
-
-        if max_days is None:
-            hist_df = df.copy()
-        else:
-            # Safe slice using last N business days
-            hist_df = df.tail(max_days * 2).iloc[-max_days:]  # conservative
+        hist_df = df.tail(max_days * 2).iloc[-max_days:]  # conservative
 
         hist_dates = hist_df.index.tolist()
         hist_close = hist_df["Close"].tolist()
