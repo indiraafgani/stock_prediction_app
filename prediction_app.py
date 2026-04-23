@@ -39,6 +39,9 @@ html,body,[class*="css"]{font-family:'Syne',sans-serif;background-color:var(--bg
 
 /* NAV */
 .nav-bar{display:flex;align-items:center;justify-content:space-between;padding:0.9rem 0;margin-bottom:1.5rem;border-bottom:1px solid var(--border);}
+.burger-btn{background:none;border:1px solid var(--border);border-radius:6px;padding:5px 8px;cursor:pointer;display:flex;flex-direction:column;gap:3px;align-items:center;justify-content:center;width:32px;height:32px;transition:border-color 0.2s;}
+.burger-btn:hover{border-color:var(--accent);}
+.burger-btn span{display:block;width:14px;height:2px;background:#64748b;border-radius:2px;}
 .nav-logo{font-family:'Space Mono',monospace;font-size:1.4rem;font-weight:700;color:var(--accent);letter-spacing:-0.03em;}
 .nav-logo span{color:var(--muted);}
 .nav-time{font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--muted);}
@@ -117,11 +120,6 @@ html,body,[class*="css"]{font-family:'Syne',sans-serif;background-color:var(--bg
 [data-testid="stSidebar"]{background:var(--bg2) !important;border-right:1px solid var(--border) !important;}
 [data-testid="stSidebar"] .block-container{padding:1rem;}
 .sidebar-logo{font-family:'Space Mono',monospace;font-size:1.1rem;color:var(--accent);font-weight:700;margin-bottom:1.5rem;padding-bottom:0.8rem;border-bottom:1px solid var(--border);}
-
-/* BURGER TOGGLE */
-.burger-wrap{display:inline-flex;align-items:center;gap:0.5rem;margin-bottom:0.6rem;}
-.burger-icon{display:flex;flex-direction:column;gap:4px;cursor:pointer;padding:5px 7px;border-radius:6px;border:1px solid var(--border);background:var(--card);box-shadow:0 1px 3px rgba(0,0,0,0.06);}
-.burger-icon span{display:block;width:16px;height:2px;background:#64748b;border-radius:2px;}
 
 /* STREAMLIT OVERRIDES */
 .stSelectbox>div>div{background:var(--card) !important;border-color:var(--border) !important;color:var(--text) !important;}
@@ -474,44 +472,19 @@ def run_pipeline(ticker, horizon, method, force_retrain=False):
     return payload
 
 
-# ─── Sidebar Toggle State ────────────────────────────────────────────────────
-if "sidebar_open" not in st.session_state:
-    st.session_state.sidebar_open = True
-
 # ─── Sidebar ──────────────────────────────────────────────────────────────────
 with st.sidebar:
-    # Burger button row
-    burger_col, logo_col = st.columns([1, 4])
-    with burger_col:
-        if st.button("☰", key="burger_toggle", help="Minimize / Maximize sidebar",
-                     use_container_width=False):
-            st.session_state.sidebar_open = not st.session_state.sidebar_open
-    with logo_col:
-        st.markdown('<div class="sidebar-logo" style="margin-bottom:0;border-bottom:none;padding-bottom:0;">◈ SIGNAL</div>', unsafe_allow_html=True)
-
-    st.markdown('<hr style="margin:0.8rem 0;border-color:var(--border);">', unsafe_allow_html=True)
-
-    if st.session_state.sidebar_open:
-        ticker  = st.selectbox("Choose the stock:",  list(TICKERS.keys()),
-                                format_func=lambda x: f"{x} — {TICKERS[x][:22]}")
-        horizon = st.selectbox("Time Horizon", list(HORIZONS.keys()), index=1)
-        method  = st.selectbox("Forecast Method",    METHODS, index=0)
-        st.markdown("---")
-        retrain = st.button("⟳  Force Retrain")
-        st.markdown("""
-        <div style="margin-top:2rem;font-family:'Space Mono',monospace;font-size:0.62rem;color:#64748b;">
-        created by SIGNAL<br>Models: SARIMAX · Prophet · Hybrid<br>
-        </div>""", unsafe_allow_html=True)
-    else:
-        # Collapsed state: use defaults so pipeline still runs
-        ticker  = list(TICKERS.keys())[0]
-        horizon = list(HORIZONS.keys())[1]
-        method  = METHODS[0]
-        retrain = False
-        st.markdown(
-            '<div style="font-family:\'Space Mono\',monospace;font-size:0.6rem;color:#64748b;text-align:center;">Click ☰<br>to expand</div>',
-            unsafe_allow_html=True
-        )
+    st.markdown('<div class="sidebar-logo">◈ SIGNAL</div>', unsafe_allow_html=True)
+    ticker  = st.selectbox("Choose the stock:",  list(TICKERS.keys()),
+                            format_func=lambda x: f"{x} — {TICKERS[x][:22]}")
+    horizon = st.selectbox("Time Horizon", list(HORIZONS.keys()), index=1)
+    method  = st.selectbox("Forecast Method",    METHODS, index=0)
+    st.markdown("---")
+    retrain = st.button("⟳  Force Retrain")
+    st.markdown("""
+    <div style="margin-top:2rem;font-family:'Space Mono',monospace;font-size:0.62rem;color:#64748b;">
+    created by SIGNAL<br>Models: SARIMAX · Prophet · Hybrid<br>
+    </div>""", unsafe_allow_html=True)
 
 
 # ─── Nav Bar ──────────────────────────────────────────────────────────────────
@@ -522,7 +495,16 @@ mkt_color   = "#10b981" if "OPEN" in mkt_status else ("#f59e0b" if "HOURS" in mk
 
 st.markdown(f"""
 <div class="nav-bar">
-  <div class="nav-logo">◈ SIGNAL<span>·ai</span></div>
+  <div style="display:flex;align-items:center;gap:0.8rem;">
+    <button class="burger-btn" onclick="
+      var sidebar = window.parent.document.querySelector('[data-testid=stSidebar]');
+      var btn = window.parent.document.querySelector('[data-testid=stSidebarCollapseButton] button');
+      if(btn){{btn.click();}}
+    " title="Toggle sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-logo">◈ SIGNAL<span>·ai</span></div>
+  </div>
   <div class="nav-time">{now_str}</div>
   <div class="nav-status">
     <div class="status-dot" style="background:{mkt_color};box-shadow:0 0 6px {mkt_color};"></div>
@@ -637,17 +619,17 @@ with tab1:
         import plotly.graph_objects as go
         from plotly.subplots import make_subplots
 
-        # ── Historical period filter ──────────────────────────────────────────
-        col_title, col_radio = st.columns([1, 2])
-        with col_title:
+        # ── Historical period filter ─────────────────────────────────────────
+        _hcol1, _hcol2 = st.columns([1, 2])
+        with _hcol1:
             st.markdown(
-                '<div style="font-family:\'Space Mono\',monospace;font-size:0.72rem;'
-                'font-weight:700;color:#334155;padding-top:0.55rem;">Historical Data Period</div>',
+                '<p style="font-family:Space Mono,monospace;font-size:0.72rem;'
+                'font-weight:700;color:#334155;margin:0.55rem 0 0 0;">Historical Data Period</p>',
                 unsafe_allow_html=True
             )
-        with col_radio:
+        with _hcol2:
             hist_option = st.radio(
-                "",
+                "hist_period",
                 ["1 Month", "3 Months", "6 Months"],
                 horizontal=True,
                 index=1,
