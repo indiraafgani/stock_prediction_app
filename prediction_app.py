@@ -709,7 +709,7 @@ with tab1:
         fig.add_trace(go.Scatter(
             x=fc_dates, y=list(ci_hi_wide),
             mode="lines",
-            line=dict(color="rgba(210,195,140,0.25)", width=0.5),
+            line=dict(color="rgba(210,195,140,0.25)", width=50),
             showlegend=False,
             hoverinfo="skip",
             name="_ci_upper"
