@@ -118,45 +118,25 @@ html,body,[class*="css"]{font-family:'Syne',sans-serif;background-color:var(--bg
 [data-testid="stSidebar"] .block-container{padding:1rem;}
 .sidebar-logo{font-family:'Space Mono',monospace;font-size:1.1rem;color:var(--accent);font-weight:700;margin-bottom:1.5rem;padding-bottom:0.8rem;border-bottom:1px solid var(--border);}
 
-/* ── Restyle Streamlit's native sidebar collapse button → burger icon ── */
+/* ── Sidebar toggle buttons — fully visible and clickable ── */
 [data-testid="stSidebarCollapseButton"] button,
 [data-testid="collapsedControl"] button {
-  width:36px !important; height:36px !important;
   background:var(--card) !important;
   border:1px solid var(--border) !important;
   border-radius:6px !important;
-  box-shadow:0 1px 4px rgba(0,0,0,0.07) !important;
-  color:transparent !important;
-  display:flex !important; align-items:center !important; justify-content:center !important;
+  color:#64748b !important;
   cursor:pointer !important;
-  position:relative !important;
-  overflow:hidden !important;
   transition:border-color 0.2s !important;
 }
 [data-testid="stSidebarCollapseButton"] button:hover,
 [data-testid="collapsedControl"] button:hover {
   border-color:var(--accent) !important;
+  color:var(--accent) !important;
 }
-/* Hide the original SVG arrow icon */
 [data-testid="stSidebarCollapseButton"] button svg,
 [data-testid="collapsedControl"] button svg {
-  display:none !important;
-}
-/* Draw three burger lines using pseudo-elements + box-shadow trick */
-[data-testid="stSidebarCollapseButton"] button::before,
-[data-testid="collapsedControl"] button::before {
-  content:'' !important;
-  display:block !important;
-  width:14px !important; height:2px !important;
-  background:#64748b !important;
-  border-radius:2px !important;
-  box-shadow:0 5px 0 #64748b, 0 -5px 0 #64748b !important;
-  position:absolute !important;
-}
-[data-testid="stSidebarCollapseButton"] button:hover::before,
-[data-testid="collapsedControl"] button:hover::before {
-  background:var(--accent) !important;
-  box-shadow:0 5px 0 var(--accent), 0 -5px 0 var(--accent) !important;
+  color:inherit !important;
+  fill:currentColor !important;
 }
 
 /* STREAMLIT OVERRIDES */
