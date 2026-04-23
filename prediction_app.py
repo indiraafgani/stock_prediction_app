@@ -804,16 +804,20 @@ with tab2:
     st.markdown('<div class="sec-hdr">Forecast Output Table</div>', unsafe_allow_html=True)
     if len(forecast)>0:
         biz_dates = next_biz_days(len(forecast))
+        # Fallback CI jika kosong atau panjangnya tidak cocok
+        _ci_lo = list(ci_lo) if len(ci_lo) == len(forecast) else None
+        _ci_hi = list(ci_hi) if len(ci_hi) == len(forecast) else None
+        if _ci_lo is None or _ci_hi is None:
+            _std = float(df["Close"].std()) * 0.04
+            _ci_lo = [v - _std * (1 + i * 0.04) for i, v in enumerate(forecast)]
+            _ci_hi = [v + _std * (1 + i * 0.04) for i, v in enumerate(forecast)]
+
         rows_html = ""
-        for dt, fc_v, lo_v, hi_v in zip(
-            biz_dates, forecast,
-            ci_lo if len(ci_lo)==len(forecast) else [None]*len(forecast),
-            ci_hi if len(ci_hi)==len(forecast) else [None]*len(forecast),
-        ):
+        for dt, fc_v, lo_v, hi_v in zip(biz_dates, forecast, _ci_lo, _ci_hi):
             chg  = (fc_v - price_info["price"])/price_info["price"]*100 if price_info["price"] else 0
             cc   = "up" if chg>=0 else "dn"
             sign = "+" if chg>=0 else ""
-            ci_str = f"${lo_v:.2f} – ${hi_v:.2f}" if lo_v is not None else "—"
+            ci_str = f"${lo_v:.2f} – ${hi_v:.2f}"
             rows_html += f"""<tr>
               <td style="color:#64748b">{dt.strftime("%a, %b %d %Y")}</td>
               <td style="color:#111827;font-weight:600">${fc_v:.2f}</td>
