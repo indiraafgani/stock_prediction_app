@@ -700,16 +700,26 @@ with tab1:
             showlegend=False, hoverinfo="skip"
         ), row=1, col=1)
 
-        # ── 4. CI band for future forecast ────────────────────────────────────
+        # ── 4. CI shadow band (upper then lower with tonexty fill) ───────────
+        # Upper boundary — invisible line, anchor for fill
         fig.add_trace(go.Scatter(
-            x=fc_dates + fc_dates[::-1],
-            y=list(ci_hi_arr) + list(ci_lo_arr[::-1]),
-            fill="toself",
-            fillcolor=ci_fill,
-            line=dict(color="rgba(0,0,0,0)"),
+            x=fc_dates, y=list(ci_hi_arr),
+            mode="lines",
+            line=dict(color="rgba(99,102,241,0.15)", width=0.5),
             showlegend=False,
             hoverinfo="skip",
-            name="CI Band"
+            name="_ci_upper"
+        ), row=1, col=1)
+        # Lower boundary — fills back up to upper, creating the shadow
+        fig.add_trace(go.Scatter(
+            x=fc_dates, y=list(ci_lo_arr),
+            mode="lines",
+            fill="tonexty",
+            fillcolor="rgba(99,102,241,0.12)",
+            line=dict(color="rgba(99,102,241,0.15)", width=0.5),
+            showlegend=True,
+            name="Confidence Interval",
+            hovertemplate="<b>%{x|%b %d %Y}</b><br>CI Low: $%{y:.2f}<extra></extra>"
         ), row=1, col=1)
 
         # ── 5. Future Forecast line — visually distinct ───────────────────────
